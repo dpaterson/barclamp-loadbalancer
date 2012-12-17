@@ -1,0 +1,15 @@
+{
+  "id": "bc-template-swift",
+  "description": "part of Openstack, and provides a distributed blob storage",
+  "attributes": {
+    "loadbalancer": {
+        "services": [
+            { "service_type" : "swift",
+              "service_instance" : "default",
+              "ssl" : true,
+              "external_port" : 8080
+            }
+        ]
+    }
+  }
+}
