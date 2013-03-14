@@ -1,6 +1,9 @@
 loadbalancer
 ============
 
+This barclamp is currently only actively worked on the Grizzly feature branch, not in the main development branch.
+This master branch is here for various sync background tasks to be happy.
+
 A loadbalancer for other services.
 Utilizing Pound [1] and KeepaliveD [2] (note that keepalive is something totally different). For a sample config see [3]
 
