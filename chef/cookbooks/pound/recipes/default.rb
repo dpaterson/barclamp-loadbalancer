@@ -1,4 +1,6 @@
-package "pound"
+package "pound" do
+  action :install
+end
 
 template "/etc/default/pound" do
   source "default.erb"

@@ -5,7 +5,7 @@
 
 # Which template to use; defaults to keepalived.conf.erb
 # Other options include "vrrp" (for vrrp instances) or (TODO: "real"; for real servers)
-default[:keepalived][:template_suffix] = ""
+default[:keepalived][:template_suffix] = "vrrp"
 default[:keepalived][:notification_emails] = []
 default[:keepalived][:notification_email_from] = "root@localhost"
 default[:keepalived][:smtp_server] = nil
@@ -21,12 +21,12 @@ default[:keepalived][:vrrp_instances] = [
     :virtual_router_id  => 51,
     :master_priority    => 101,     # Priority to use on the Master
     :backup_priority    => 100,     # Priority to use on the Backup
-    :virtual_ipaddress  => ["127.0.0.1"],
+    :virtual_ipaddress  => ["192.168.124.157"],
     :backup_nodes       => [], # node names for backup hosts. These will
                                # be listed with a BACKUP state.
     :track_script => {
-      :name     => "",  # name for your track script, "eg: chk_haproxy"
-      :script   => "",  # actual command to do the check, "eg: killall -0 haproxy"
+      :name     => "chk_pound",  # name for your track script, "eg: chk_haproxy"
+      :script   => "killall -0 pound",  # actual command to do the check, "eg: killall -0 haproxy"
       :interval => 2,   
       :weight   => 2
     },

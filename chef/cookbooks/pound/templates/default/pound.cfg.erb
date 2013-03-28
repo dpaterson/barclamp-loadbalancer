@@ -23,7 +23,8 @@ Control "/var/run/pound/poundctl.socket"
 
 
 ListenHTTPS
-  Address <%= node[:loadbalancer][:listen][:address] %>
+#  Address <%= node[:loadbalancer][:listen][:address] %>
+  Address 0.0.0.0
   Port    <%= node[:loadbalancer][:listen][:port] %>
   xHTTP		0
   Cert "/etc/pound/ssl.pem"

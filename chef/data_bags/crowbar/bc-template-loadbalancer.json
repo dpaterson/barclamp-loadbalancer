@@ -1,6 +1,6 @@
 {
-  "id": "bc-template-swift",
-  "description": "part of Openstack, and provides a distributed blob storage",
+  "id": "bc-template-loadbalancer",
+  "description": "loadbalancer",
   "attributes": {
     "loadbalancer": {
         "services": [
