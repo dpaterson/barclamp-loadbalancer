@@ -1,15 +1,24 @@
 {
-  "id": "bc-template-swift",
+  "id": "bc-template-loadbalancer",
   "description": "part of Openstack, and provides a distributed blob storage",
   "attributes": {
     "loadbalancer": {
-        "services": [
-            { "service_type" : "swift",
-              "service_instance" : "default",
-              "ssl" : true,
-              "external_port" : 8080
-            }
+        "services": [ 
+            { "service_type" : "swift", "service_instance" : "default", "ssl" : true, "external_port" : 8080 }
         ]
+    }
+  },
+  "deployment" : {
+    "loadbalancer" : {
+       "crowbar-revision": 0,
+       "elements" : { },
+       "element_order": [ ["loadbalancer"] ],
+       "config" : {
+        "environment" : "loadbalancer-base-config",
+        "mode" : "full",
+        "transitions" : false,
+        "transition_list": []
+      }
     }
   }
 }
