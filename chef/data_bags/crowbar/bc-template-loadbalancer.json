@@ -1,6 +1,6 @@
 {
   "id": "bc-template-loadbalancer",
-  "description": "part of Openstack, and provides a distributed blob storage",
+  "description": "keepalived and pound loadbalancer",
   "attributes": {
     "loadbalancer": {
         "services": [ 
