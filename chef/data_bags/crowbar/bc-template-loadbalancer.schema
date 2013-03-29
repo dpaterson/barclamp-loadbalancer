@@ -1,47 +1,43 @@
-{
-  "id": "bc-template-loadbalancer",
-  "description": "provides a shell for writing tests against",
-  "attributes": {
-    "loadbalancer": { "type" : "map", "required": true, "type": "map", "mapping" : 
-      "services" { "type": "sequence", "required" :true, "sequence" :[ 
-        { "type" : "map", "mapping" : { 
-          "service_type" : { "type": "str", "required": true }, 
-          "service_instance": { "type": "str", "required": true }, 
-          "ssl": { "type" :"bool", "required": true},
-          "external_port": {"type" :"integer", "required" :true }
-          } 
-        }
-      ]},
-    
+{ "type" : "map", "required" : true, "mapping" : {
+    "id" : { "type" : "str", "required" : true, "pattern" : "/^bc-loadbalancer-|^bc-template-loadbalancer$/" },
+    "description" : { "type" : "str", "required" : true },
+    "attributes" : { "type" : "map", "required" : true, "mapping" : {
+      "loadbalancer" : { "type" : "map", "required" : true, "mapping" : {
+        "services" : { "type" : "seq", "required" : true, "sequence" : [
+           { "type" : "map", "mapping" : {
+             "service_type" : { "type" : "str", "required" : true },
+             "service_instance" : { "type" : "str", "required" : true },
+             "ssl" : { "type" : "bool", "required" : true },
+             "external_port" : {"type" : "int", "required" : true }
+           }}
+         ]}
+      }}
     }
   },
-  "deployment": { "type": "map", "required": true, "mapping": {
-      "loadbalancer": { "type": "map","required": true, "mapping": {
-          "crowbar-revision": { "type": "int", "required": true },
-          "crowbar-committing": { "type": "bool" },
-          "crowbar-queued": { "type": "bool" },
-          "element_states": { "type": "map", "mapping": {
-              = : { "type": "seq", "required": true,"sequence": [ { "type": "str" } ]} 
+  "deployment" : { "type" : "map", "required" : true, "mapping" : {
+      "loadbalancer" : { "type" : "map", "required" : true, "mapping" : {
+          "crowbar-revision" : { "type" : "int", "required" : true },
+          "crowbar-committing" : { "type" : "bool" },
+          "crowbar-queued" : { "type" : "bool" },
+          "element_states" : { "type" : "map", "mapping" : {
+              = : { "type" : "seq", "required" : true, "sequence" : [ { "type" : "str" } ]}
             }
           },
-          "elements": { "type": "map", "required": true, "mapping": {
-              = : { "type": "seq", "required": true, "sequence": [ { "type": "str" } ] }
+          "elements" : { "type" : "map", "required" : true, "mapping" : {
+              = : { "type" : "seq", "required" : true, "sequence" : [ { "type" : "str" } ] }
             }
           },
-          "element_order": {"type": "seq","required": true, "sequence": 
-             [ {"type": "seq","sequence": [ { "type": "str" } ]} ]
+          "element_order" : { "type" : "seq", "required" : true, "sequence" : 
+             [ {"type" : "seq", "sequence" : [ { "type" : "str" } ]} ]
           },
-          "config": {
-            "type": "map",
-            "required": true,
-            "mapping": {
-              "environment": { "type": "str", "required": true },
-              "mode": { "type": "str", "required": true },
-              "transitions": { "type": "bool", "required": true },
-              "transition_list": {
-                "type": "seq",
-                "required": true,
-                "sequence": [ { "type": "str" } ]
+          "config" : { "type" : "map", "required" : true, "mapping" : {
+              "environment" : { "type" : "str", "required" : true },
+              "mode" : { "type" : "str", "required" : true },
+              "transitions" : { "type" : "bool", "required" : true },
+              "transition_list" : {
+                "type" : "seq",
+                "required" : true,
+                "sequence" : [ { "type" : "str" } ]
               }
             }
           }
@@ -49,4 +45,5 @@
       }
     }
   }
+}
 }
