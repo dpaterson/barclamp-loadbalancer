@@ -2,10 +2,10 @@ default[:pound][:ssl_port] = 443
 default[:pound][:ssl_proxy_port] = 81
 
 default["loadbalancer"]["services"] = [
-            { "service_type" : "swift",
-              "service_instance" : "default",
-              "ssl" : true,
-              "external_port" : 8080
+            { :service_type => "swift",
+              :service_instance => "default",
+              :ssl => true,
+              :external_port => 8080
             }
 ]
 
