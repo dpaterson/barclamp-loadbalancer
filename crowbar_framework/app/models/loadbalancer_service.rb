@@ -14,10 +14,10 @@
 # 
 
 class LoadbalancerService < ServiceObject
-  def initialize(thelogger)
-    @logger = thelogger
-    @bc_name = "loadbalancer"
-  end
+  def initialize(thelogger)
+    @logger = thelogger
+    @bc_name = "loadbalancer"
+  end
 
    #
   def create_proposal
