@@ -21,7 +21,7 @@ LogLevel	1
 # poundctl control socket
 Control "/var/run/pound/poundctl.socket"
 
-<%= node[:loadbalancer][:services].each { |svc|
+<% node[:loadbalancer][:services].each { |svc|
 <% if svc[:ssl]? %>
 ListenHTTPS
 <% else %>
@@ -42,7 +42,7 @@ ListenHTTP
 <% end %>
 
   Service
-    <%= node[:loadbalancer][:backend].each { |be| 
+    <% node[:loadbalancer][:backend].each { |be| 
       BackEnd
         Address be[:address]
         Port    svc[:external_port]
