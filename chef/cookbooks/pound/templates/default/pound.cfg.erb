@@ -42,9 +42,9 @@ ListenHTTP
 <% end -%>
 
   Service
-    <% node[:loadbalancer][:backend].each { |be| -%>
+    <% @backend.each { |be| -%>
       BackEnd
-        Address <%= be[:address] %>
+        Address <%= be %>
         Port    <%= svc[:external_port] %>
         TimeOut 150
       End
