@@ -22,7 +22,7 @@ default[:keepalived][:vrrp_instances] = [
     :master_priority    => 101,     # Priority to use on the Master
     :backup_priority    => 100,     # Priority to use on the Backup
     :virtual_ipaddress  => ["192.168.124.157"],
-    :backup_nodes       => [], # node names for backup hosts. These will
+    :backup_nodes       => ["fake.node"], # node names for backup hosts. These will
                                # be listed with a BACKUP state.
     :track_script => {
       :name     => "chk_pound",  # name for your track script, "eg: chk_haproxy"
