@@ -37,8 +37,9 @@ end
 lb_nodes = search(:node, "roles:loadbalancer OR role:loadbalancer") || []
 if lb_nodes.length > 2
   backup_nodes = lb_nodes.map { |x| x.name }
+  backup_nodes.sort
   backup_nodes.shift
-  node["keepalived"]["vrrp_instances"]["backup_nodes"] = backup_nodes
+  node["keepalived"]["backup_nodes"] = backup_nodes
 end
 
 template "/etc/keepalived/keepalived.conf" do

@@ -33,19 +33,19 @@ class LoadbalancerService < ServiceObject
 
   def apply_role_pre_chef_call(old_role, role, all_nodes)
     name =""
-    role.override_attributes["loadbalancer"]["config"]["environment"].scan(/.*-.*-(.*)$/) { |x| 
-      name = x
-    }
-    vnodes = NodeObject.find_nodes_by_name(form_virt_node_name(name))
-    if vnodes.nil? or vnodes.length <1 
-      vnode = NodeObject.create_new name
-    else
-      vnode=vnodes[0]
-    end
+    #role.override_attributes["loadbalancer"]["config"]["environment"].scan(/.*-.*-(.*)$/) { |x| 
+    #  name = x
+    #}
+    #vnodes = NodeObject.find_nodes_by_name(form_virt_node_name(name))
+    #if vnodes.nil? or vnodes.length <1 
+    #  vnode = NodeObject.create_new name
+    #else
+    #  vnode=vnodes[0]
+    #end
 
-    net_svc = NetworkService.new @logger
+    #net_svc = NetworkService.new @logger
     # create a new public IP address for the virtual node.
-    net_svc.allocate_ip "default", "public", "host", vnode
+    #net_svc.allocate_ip "default", "public", "host", vnode
   end
 
 end
