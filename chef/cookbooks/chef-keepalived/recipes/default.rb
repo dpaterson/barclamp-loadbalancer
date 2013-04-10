@@ -35,11 +35,12 @@ template_source = begin
 end
 
 lb_nodes = search(:node, "roles:loadbalancer OR role:loadbalancer") || []
+backup_nodes = []
 if lb_nodes.length > 2
   backup_nodes = lb_nodes.map { |x| x.name }
   backup_nodes.sort
   backup_nodes.shift
-  node["keepalived"]["backup_nodes"] = backup_nodes
+  #node["keepalived"]["backup_nodes"] = backup_nodes
 end
 
 template "/etc/keepalived/keepalived.conf" do
@@ -47,6 +48,9 @@ template "/etc/keepalived/keepalived.conf" do
   owner "root"
   group "root"
   mode 0644
+  variables( {
+    :bnodes => backup_nodes
+  } )
   notifies :restart, resources(:service => "keepalived")
 end
 
