@@ -2,10 +2,10 @@ default[:pound][:ssl_port] = 443
 default[:pound][:ssl_proxy_port] = 81
 
 default["loadbalancer"]["services"] = [
-            { "service_type" : "swift",
-              "service_instance" : "default",
-              "ssl" : true,
-              "external_port" : 8080
+            { :service_type => "swift",
+              :service_instance => "default",
+              :ssl => true,
+              :external_port => 8080
             }
 ]
 
@@ -19,13 +19,13 @@ default["loadbalancer"]["params"] = {
 ### 
 # Crowbar would set these based on the services used.
 default["loadbalancer"]["backend"] = [
-    { :address =>"192.168.124.81", :port => 8080 },
-    { :address =>"192.168.124.82", :port => 8080 } 
+    { :address =>"192.168.124.158", :port => 8080 },
+    { :address =>"192.168.124.159", :port => 8080 } 
 ]
 
 default["loadbalancer"]["listen"] = {
-    :address => "192.168.124.83",
-    :port =>80
+    :address => "192.168.124.157",
+    :port => 80
 }
 
 default["node"]["keepalived"]["vrrp_instances"]= [
@@ -36,6 +36,6 @@ default["node"]["keepalived"]["vrrp_instances"]= [
     :master_priority    => 101,     # Priority to use on the Master
     :backup_priority    => 100,     # Priority to use on the Backup
     :backup_nodes       => [], # node names for backup hosts. These will
-    :virtual_ipaddress  => ["127.0.0.1"],
+    :virtual_ipaddress  => ["192.168.124.157"],
   }
 ]

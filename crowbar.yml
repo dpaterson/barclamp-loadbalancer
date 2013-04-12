@@ -16,7 +16,7 @@
 #
 
 barclamp:
-  name: loadbalance
+  name: loadbalancer
   display: Load Balancer
   description: Highly available load balancer
   version: 0
@@ -32,7 +32,7 @@ crowbar:
 locale_additions:
   en:
     barclamp:
-      loadbalance:
+      loadbalancer:
         edit_attributes: 
           attributes: Attributes
         edit_deployment: 

@@ -1,4 +1,6 @@
-package "pound"
+package "pound" do
+  action :install
+end
 
 template "/etc/default/pound" do
   source "default.erb"
@@ -15,9 +17,14 @@ service "pound" do
   action :nothing
 end
 
+backends = search(:node, "roles:loadbalancer OR role:loadbalancer") || []
+
 template "/etc/pound/pound.cfg" do
   source "pound.cfg.erb"
   mode "644"
+  variables(
+    :backend => backends.map { |x| x.name }
+  )
   notifies :restart, resources(:service => "pound")
 end
 
