@@ -12,14 +12,6 @@
           "type": "map",
           "required": true,
           "mapping": {
-	    "services" : { "type" : "seq", "required" : true, "sequence" : [
-              { "type" : "map", "mapping" : {
-                "service_type" : { "type" : "str", "required" : true },
-                "service_instance" : { "type" : "str", "required" : true },
-                "ssl" : { "type" : "bool", "required" : true },
-                "external_port" : {"type" : "int", "required" : true }
-              }}
-            ]}
             "debug": { "type": "bool", "required": true },
             "verbose": { "type": "bool", "required": true },
             "gitrepo": { "type": "str", "required": true },
