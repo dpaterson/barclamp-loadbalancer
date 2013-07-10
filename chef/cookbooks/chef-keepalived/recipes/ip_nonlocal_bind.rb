@@ -18,7 +18,7 @@
 #
 
 
-bash "" do
+bash "sysctl_nonlocal_bind" do
   user "root"
   code <<-EOH
     echo "net.ipv4.ip_nonlocal_bind=1" >> /etc/sysctl.conf

@@ -5,7 +5,9 @@
 :javascript
   $(document).ready(function(){
     var constraints = { 
-              "loadbalancer": { "unique": true, "count": 2 } } 
+              "lb-master": { "unique": true, "count": 1 },
+              "lb-slave": { "unique": true, "count": 1 }
+    };
     node_selector($('#drag_drop'), constraints)
   });
 

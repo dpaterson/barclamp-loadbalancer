@@ -26,60 +26,40 @@ service "keepalived" do
   action [:enable, :start]
 end
 
-template_source = begin
-  if node.keepalived.template_suffix.empty?
-    "keepalived.conf.erb"
-  else
-    "keepalived_#{node.keepalived.template_suffix}.conf.erb"
-  end
+env_filter="roles:#{node[:loadbalancer][:config][:environment]}"
+if node[:roles].include?("lb-master")
+  env_filter="#{env_filter} AND roles:lb-slave"
+  is_master=true
+else
+  env_filter="#{env_filter} AND roles:lb-master"
+  is_master=false
 end
 
-lb_nodes = search(:node, "roles:loadbalancer OR role:loadbalancer") || []
-backup_nodes = []
-if lb_nodes.length > 2
-  backup_nodes = lb_nodes.map { |x| x.name }
-  backup_nodes.sort
-  backup_nodes.shift
-  #node["keepalived"]["backup_nodes"] = backup_nodes
-end
+neighbor=search(:node, "#{env_filter}").first || []
+admin_net=Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "admin")
+public_net=Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "public")
+admin_iface=admin_net.interface
+public_iface=public_net.interface
+public_net_db=data_bag_item('crowbar', 'public_network')
+admin_net_db=data_bag_item('crowbar', 'admin_network')
+public_ip=public_net_db["allocated_by_name"]["loadbalancer"]["address"]
+admin_ip=admin_net_db["allocated_by_name"]["loadbalancer"]["address"]
+
+node.set["loadbalancer"]["public_ip"]=public_ip
+node.set["loadbalancer"]["admin_ip"]=admin_ip
+node.save
 
 template "/etc/keepalived/keepalived.conf" do
-  source template_source
+  source "keepalived.conf.erb"
   owner "root"
   group "root"
   mode 0644
   variables( {
-    :bnodes => backup_nodes
+    :is_master => is_master,
+    :admin_iface => admin_iface,
+    :admin_ip => admin_ip,
+    :public_iface => public_iface,
+    :public_ip => public_ip
   } )
   notifies :restart, resources(:service => "keepalived")
-end
-
-# Set up notification scripts if they exist
-node.keepalived.vrrp_instances.each do |instance|
-  if instance['notify_scripts'] && (not instance['notify_scripts'].empty?)
-    instance['notify_scripts'].each do |state, info|
-
-      # create the directory for these
-      directory "/etc/keepalived/scripts/#{instance['name']}" do
-        owner "root"
-        group "root"
-        mode "0755"
-        action :create
-        recursive true
-      end
-    
-      # write the script file
-      template "/etc/keepalived/scripts/#{instance['name']}/notify_#{state}.sh" do
-        source "notify_script.sh.erb"
-        owner "root"
-        group "root"
-        mode "0755"
-        variables(
-          :command => info['command'],
-          :args    => info['args']
-       )
-       notifies :restart, resources(:service => "keepalived"), :delayed
-      end
-    end
-  end
 end
