@@ -47,6 +47,10 @@ admin_ip=admin_net_db["allocated_by_name"]["loadbalancer"]["address"]
 
 node.set["loadbalancer"]["public_ip"]=public_ip
 node.set["loadbalancer"]["admin_ip"]=admin_ip
+#lets leave here an entity for hosts wich may be helpfull when we going to introduce ssl support for lb
+node.set["loadbalancer"]["public_host"]=public_ip
+node.set["loadbalancer"]["admin_host"]=admin_ip
+
 node.save
 
 template "/etc/keepalived/keepalived.conf" do
