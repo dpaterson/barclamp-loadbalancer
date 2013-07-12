@@ -26,30 +26,30 @@ service "keepalived" do
   action [:enable, :start]
 end
 
-env_filter="roles:#{node[:loadbalancer][:config][:environment]}"
+env_filter = "roles:#{node[:loadbalancer][:config][:environment]}"
 if node[:roles].include?("lb-master")
-  env_filter="#{env_filter} AND roles:lb-slave"
-  is_master=true
+  env_filter = "#{env_filter} AND roles:lb-slave"
+  is_master = true
 else
-  env_filter="#{env_filter} AND roles:lb-master"
-  is_master=false
+  env_filter = "#{env_filter} AND roles:lb-master"
+  is_master = false
 end
 
-neighbor=search(:node, "#{env_filter}").first || []
-admin_net=Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "admin")
-public_net=Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "public")
-admin_iface=admin_net.interface
-public_iface=public_net.interface
-public_net_db=data_bag_item('crowbar', 'public_network')
-admin_net_db=data_bag_item('crowbar', 'admin_network')
-public_ip=public_net_db["allocated_by_name"]["loadbalancer"]["address"]
-admin_ip=admin_net_db["allocated_by_name"]["loadbalancer"]["address"]
+neighbor = search(:node, "#{env_filter}").first || []
+admin_net = Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "admin")
+public_net = Chef::Recipe::Barclamp::Inventory.get_network_by_type(node, "public")
+admin_iface = admin_net.interface
+public_iface = public_net.interface
+public_net_db = data_bag_item('crowbar', 'public_network')
+admin_net_db = data_bag_item('crowbar', 'admin_network')
+public_ip = public_net_db["allocated_by_name"]["loadbalancer"]["address"]
+admin_ip = admin_net_db["allocated_by_name"]["loadbalancer"]["address"]
 
-node.set["loadbalancer"]["public_ip"]=public_ip
-node.set["loadbalancer"]["admin_ip"]=admin_ip
+node.set["loadbalancer"]["public_ip"] = public_ip
+node.set["loadbalancer"]["admin_ip"] = admin_ip
 #lets leave here an entity for hosts wich may be helpfull when we going to introduce ssl support for lb
-node.set["loadbalancer"]["public_host"]=public_ip
-node.set["loadbalancer"]["admin_host"]=admin_ip
+node.set["loadbalancer"]["public_host"] = public_ip
+node.set["loadbalancer"]["admin_host"] = admin_ip
 
 node.save
 
