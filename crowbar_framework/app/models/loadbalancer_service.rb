@@ -65,9 +65,16 @@ class LoadbalancerService < ServiceObject
       net_svc.allocate_ip "default", "public", "host", n
       net_svc.enable_interface "default", "public", n
     end
-    # allocate new public ip address for the virtual node
-    net_svc.allocate_virtual_ip "default", "public", "host", "loadbalancer"
-    # allocate new admin ip for the virtual node
-    net_svc.allocate_virtual_ip "default", "admin", "host", "loadbalancer"
+    if all_nodes.size > 0
+      n = NodeObject.find_node_by_name all_nodes.first
+      @logger.info("cfg=#{role.name}")
+      @logger.info("domain=#{n[:domain]}")
+      service_name=role.name
+      domain=n[:domain]
+      # allocate new public ip address for the virtual node
+      net_svc.allocate_virtual_ip "default", "public", "host", "#{service_name}.#{domain}"
+      # allocate new admin ip for the virtual node
+      net_svc.allocate_virtual_ip "default", "admin", "host", "#{service_name}.#{domain}"
+    end
   end
 end

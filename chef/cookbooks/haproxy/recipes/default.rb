@@ -61,8 +61,10 @@ end
 
 public_net_db = data_bag_item('crowbar', 'public_network')
 admin_net_db = data_bag_item('crowbar', 'admin_network')
-public_ip = public_net_db["allocated_by_name"]["loadbalancer"]["address"]
-admin_ip = admin_net_db["allocated_by_name"]["loadbalancer"]["address"]
+service_name = node[:loadbalancer][:config][:environment]
+domain = node[:domain]
+public_ip = public_net_db["allocated_by_name"]["#{service_name}.#{domain}"]["address"]
+admin_ip = admin_net_db["allocated_by_name"]["#{service_name}.#{domain}"]["address"]
 
 
 cookbook_file "/etc/default/haproxy" do
