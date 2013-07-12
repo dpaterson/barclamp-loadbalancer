@@ -22,11 +22,11 @@ class LoadbalancerService < ServiceObject
   def proposal_dependencies(role)
     answer = []
     #lets skip for now rabbitmq and database, its doubtly that someone will add HA for this components quickly enought
-    deps = ["quantum", "cinder", "glance", "keystone", "swift", "nova"]
-    deps << "git" if role.default_attributes[@bc_name]["use_gitrepo"]
-    deps.each do |dep|
-      answer << { "barclamp" => dep, "inst" => role.default_attributes[@bc_name]["#{dep}_instance"] }
-    end
+    #deps = ["quantum", "cinder", "glance", "keystone", "swift", "nova"]
+    #deps << "git" if role.default_attributes[@bc_name]["use_gitrepo"]
+    #deps.each do |dep|
+    #  answer << { "barclamp" => dep, "inst" => role.default_attributes[@bc_name]["#{dep}_instance"] }
+    #end
     answer
   end
 
