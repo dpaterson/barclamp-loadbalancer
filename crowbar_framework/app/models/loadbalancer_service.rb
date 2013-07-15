@@ -14,15 +14,43 @@
 # 
 
 class LoadbalancerService < ServiceObject
-  def initialize
+  def initialize(thelogger)
+    @logger = thelogger
     @bc_name = "loadbalancer"
   end
 
+  def proposal_dependencies(role)
+    answer = []
+    #lets skip for now rabbitmq and database, its doubtly that someone will add HA for this components quickly enought
+    #deps = ["quantum", "cinder", "glance", "keystone", "swift", "nova"]
+    #deps << "git" if role.default_attributes[@bc_name]["use_gitrepo"]
+    #deps.each do |dep|
+    #  answer << { "barclamp" => dep, "inst" => role.default_attributes[@bc_name]["#{dep}_instance"] }
+    #end
+    answer
+  end
+
+
    #
   def create_proposal
-    @logger.debug("Nova create_proposal: entering")
+    @logger.debug("Loadbalancer create_proposal: entering")
     base = super
-
+    
+    ["Quantum", "Cinder", "Glance", "Keystone", "Swift", "Nova"].each do |inst|
+      base["attributes"][@bc_name]["#{inst.downcase}_instance"] = ""
+      begin
+        instService = eval "#{inst}Service.new(@logger)"
+        instes = instService.list_active[1]
+        if instes.empty?
+          # No actives, look for proposals
+          instes = instService.proposals[1]
+          instes = []
+        end
+        base["attributes"][@bc_name]["#{inst.downcase}_instance"] = instes[0] unless instes.empty?
+      rescue
+        @logger.info("#{@bc_name} create_proposal: no #{inst.downcase} found")
+      end
+    end
     base
   end
 
@@ -31,21 +59,22 @@ class LoadbalancerService < ServiceObject
   end
 
   def apply_role_pre_chef_call(old_role, role, all_nodes)
-    name =""
-    role.override_attributes["loadbalancer"]["config"]["environment"].scan(/.*-.*-(.*)$/) { |x| 
-      name = x
-    }
-    vnodes = NodeObject.find_nodes_by_name(form_virt_node_name(name))
-    if vnodes.nil? or vnodes.length <1 
-      vnode = NodeObject.create_new name
-    else
-      vnode=vnodes[0]
-    end
-
     net_svc = NetworkService.new @logger
-    # create a new public IP address for the virtual node.
-    net_svc.allocate_ip "default", "public", "host", vnode
+    #all nodes need a public iface to anounce public endpoint of services and one virtual admin/public
+    all_nodes.each do |n|
+      net_svc.allocate_ip "default", "public", "host", n
+      net_svc.enable_interface "default", "public", n
+    end
+    if all_nodes.size > 0
+      n = NodeObject.find_node_by_name all_nodes.first
+      @logger.info("cfg=#{role.name}")
+      @logger.info("domain=#{n[:domain]}")
+      service_name=role.name
+      domain=n[:domain]
+      # allocate new public ip address for the virtual node
+      net_svc.allocate_virtual_ip "default", "public", "host", "#{service_name}.#{domain}"
+      # allocate new admin ip for the virtual node
+      net_svc.allocate_virtual_ip "default", "admin", "host", "#{service_name}.#{domain}"
+    end
   end
-
 end
-

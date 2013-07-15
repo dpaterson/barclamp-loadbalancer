@@ -16,7 +16,7 @@
 #
 
 barclamp:
-  name: loadbalance
+  name: loadbalancer
   display: Load Balancer
   description: Highly available load balancer
   version: 0
@@ -32,12 +32,19 @@ crowbar:
 locale_additions:
   en:
     barclamp:
-      loadbalance:
+      loadbalancer:
         edit_attributes: 
           attributes: Attributes
+          quantum_instance: Quantum Instance
+          cinder_instance: Cinder Instance
+          glance_instance: Glance Instance
+          keystone_instance: Keystone Instance
+          swift_instance: Swift Instance
+          nova_instance: Nova Instance          
         edit_deployment: 
           deployment: Deployment
+
 debs:
   pkgs:
-    - pound    
+    - haproxy
     - keepalived
