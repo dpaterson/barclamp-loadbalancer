@@ -1,24 +1,55 @@
 {
-  "id": "bc-template-loadbalancer",
-  "description": "part of Openstack, and provides a distributed blob storage",
+  "description": "Installation for loadbalancer",
   "attributes": {
     "loadbalancer": {
-        "services": [ 
-            { "service_type" : "swift", "service_instance" : "default", "ssl" : true, "external_port" : 8080 }
-        ]
+      "debug": true,
+      "verbose": true,
+      "quantum_instance": "none",
+      "cinder_instance": "none",
+      "glance_instance": "none",
+      "keystone_instance": "none",
+      "swift_instance": "none",
+      "nova_instance": "none"
     }
   },
-  "deployment" : {
-    "loadbalancer" : {
-       "crowbar-revision": 0,
-       "elements" : { },
-       "element_order": [ ["loadbalancer"] ],
-       "config" : {
-        "environment" : "loadbalancer-base-config",
-        "mode" : "full",
-        "transitions" : false,
-        "transition_list": []
+  "deployment": {
+    "loadbalancer": {
+      "element_order": [
+        [
+          "lb-master"
+        ],
+        [
+          "lb-slave"
+        ]
+      ],
+      "element_states": {
+        "lb-master": [
+          "readying",
+          "ready",
+          "applying"
+        ],
+        "lb-slave": [
+          "readying",
+          "ready",
+          "applying"
+        ]
+      },
+      "config": {
+        "transition_list": [
+
+        ],
+        "transitions": false,
+        "mode": "full",
+        "environment": "loadbalancer-base-config"
+      },
+      "elements": {
+      },
+      "crowbar-revision": 0,
+      "element_run_list_order": {
+        "lb-master": 101,
+        "lb-slave": 103
       }
     }
-  }
+  },
+  "id": "bc-template-loadbalancer"
 }
